@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>نونو ❤️ محمود</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=El+Messiri:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B0000;
+            --primary-rgb: 139, 0, 0;
+            --crimson: #DC143C;
+            --rose-red: #C41E3A;
+            --soft-pink: #FFB6C1;
+            --white: #FFFFFF;
+            --gold: #D4AF37;
+            --gold-light: #F0D78C;
+            --bg-deep: #0a0000;
+            --glass-bg: rgba(20, 0, 5, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --font-title: 'Aref Ruqaa', 'Reem Kufi', serif;
+            --font-body: 'Cairo', 'El Messiri', sans-serif;
+            --transition-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            font-family: var(--font-body);
+            background: radial-gradient(ellipse at center, #140005 0%, #0a0000 35%, #050000 65%, #000000 100%);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.9;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #0d0000 0%, #000000 100%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+        #loadingOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #loadingOverlay .load-line1 {
+            font-family: var(--font-title);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            text-align: center;
+            animation: loadPulse 1.6s ease-in-out infinite;
+            text-shadow: 0 0 50px rgba(212, 175, 55, 0.8), 0 0 100px rgba(212, 175, 55, 0.5);
+        }
+        #loadingOverlay .load-line2 {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2.2vw, 1.4rem);
+            color: var(--soft-pink);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s var(--transition-smooth);
+        }
+        #loadingOverlay .load-line2.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #loadingOverlay .load-btn {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 700;
+            padding: 0.9rem 2.5rem;
+            background: linear-gradient(135deg, var(--crimson), var(--primary));
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s var(--transition-smooth);
+            box-shadow: 0 6px 30px rgba(220, 20, 60, 0.5);
+            pointer-events: none;
+        }
+        #loadingOverlay .load-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        @keyframes loadPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.07); opacity: 1; }
+        }
+        #mainContainer {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem 1.2rem 5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.8rem;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        #mainContainer.visible { opacity: 1; }
+        .glass-card {
+            background: rgba(18, 2, 6, 0.55);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 2.2rem 1.8rem;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5), 0 0 80px rgba(139, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            text-align: center;
+            width: 100%;
+            transition: all 0.5s var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(40px);
+            opacity: 0;
+        }
+        .glass-card.revealed {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -30%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 40%, transparent 60%);
+            transform: rotate(25deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-card > * { position: relative; z-index: 1; }
+        .title-section h1 {
+            font-family: var(--font-title);
+            font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+            font-weight: 700;
+            color: var(--white);
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+        .title-section .name-main {
+            font-family: var(--font-title);
+            font-size: clamp(2.2rem, 7vw, 4.2rem);
+            font-weight: 700;
+            background: linear-gradient(180deg, #FFE08C 0%, #D4AF37 25%, #B8960F 55%, #FFE4B5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.7));
+            animation: goldenShimmer 3s ease-in-out infinite;
+        }
+        @keyframes goldenShimmer {
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.7)); }
+            50% { filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.95)); }
+        }
+        .title-section .nickname {
+            font-family: var(--font-title);
+            font-size: clamp(1.6rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--rose-red);
+            text-shadow: 0 0 30px rgba(220, 20, 60, 0.7);
+            animation: roseGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes roseGlow {
+            0%, 100% { text-shadow: 0 0 30px rgba(220, 20, 60, 0.7); }
+            50% { text-shadow: 0 0 55px rgba(255, 60, 90, 0.95); }
+        }
+        .title-section .subtitle {
+            font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+            color: var(--soft-pink);
+            opacity: 0.85;
+            margin-top: 0.7rem;
+            font-weight: 300;
+        }
+        .heart-svg-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+        }
+        .heart-svg-container svg {
+            width: clamp(100px, 22vw, 150px);
+            height: clamp(90px, 20vw, 135px);
+            filter: drop-shadow(0 0 40px rgba(220, 20, 60, 0.8));
+            animation: svgHeartBeat 1.2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        @keyframes svgHeartBeat {
+            0%, 100% { transform: scale(1); }
+            12% { transform: scale(1.12); }
+            24% { transform: scale(1); }
+            36% { transform: scale(1.12); }
+            48% { transform: scale(1); }
+            60% { transform: scale(1.05); }
+            75% { transform: scale(1); }
+        }
+        .love-btn {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            font-weight: 700;
+            padding: 0.8rem 2.6rem;
+            background: linear-gradient(135deg, #e8304a 0%, #a01028 100%);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            transition: all 0.4s var(--transition-bounce);
+            box-shadow: 0 8px 35px rgba(220, 20, 60, 0.55);
+        }
+        .love-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 45px rgba(255, 60, 90, 0.75);
+        }
+        .progress-bar-wrap {
+            width: 100%;
+            max-width: 300px;
+            margin: 0.5rem auto 0;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--crimson), var(--rose-red), var(--gold));
+            border-radius: 20px;
+            transition: width 0.5s var(--transition-smooth);
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.5);
+            width: 0%;
+        }
+        .progress-label {
+            font-size: 0.75rem;
+            color: var(--soft-pink);
+            margin-top: 0.2rem;
+            opacity: 0.8;
+        }
+        .message-text {
+            font-family: var(--font-body);
+            font-size: clamp(0.95rem, 2vw, 1.25rem);
+            font-weight: 500;
+            color: #fff;
+            text-align: center;
+            padding: 1.2rem;
+            line-height: 2.1;
+            text-shadow: 0 0 20px rgba(255, 182, 193, 0.35);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .counter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+        }
+        .counter-item {
+            background: rgba(139, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 1rem 0.4rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.35s var(--transition-smooth);
+        }
+        .counter-number {
+            font-family: var(--font-body);
+            font-size: clamp(1.1rem, 2.8vw, 1.9rem);
+            font-weight: 900;
+            display: block;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.5);
+        }
+        .counter-unit {
+            font-size: clamp(0.6rem, 1.3vw, 0.8rem);
+            color: var(--soft-pink);
+            display: block;
+            margin-top: 0.2rem;
+            opacity: 0.85;
+        }
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+            aspect-ratio: 1/1;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 3px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.35), 0 0 90px rgba(139, 0, 0, 0.3);
+            animation: frameGlow 3.5s ease-in-out infinite;
+            direction: ltr;
+        }
+        @keyframes frameGlow {
+            0%, 100% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.35), 0 0 90px rgba(139, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 70px rgba(255, 215, 0, 0.6), 0 0 110px rgba(139, 0, 0, 0.5); }
+        }
+        .slider-slides {
+            display: flex;
+            transition: transform 0.7s var(--transition-smooth);
+            height: 100%;
+            width: 100%;
+            direction: ltr;
+        }
+        .slider-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .slider-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slider-placeholder {
+            font-family: var(--font-title);
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.4);
+            z-index: 1;
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .slider-dot.active {
+            background: var(--gold);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+            transform: scale(1.3);
+        }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 2;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-nav.prev { left: 8px; }
+        .slider-nav.next { right: 8px; }
+        .music-controller {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9990;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(15, 0, 5, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 0.5rem 0.8rem;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+            flex-wrap: wrap;
+            max-width: 95vw;
+        }
+        .music-controller .song-name {
+            font-size: 0.7rem;
+            color: var(--soft-pink);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin: 0 0.2rem;
+        }
+        .music-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .music-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .music-btn.active-toggle { color: var(--gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.7); }
+        .music-volume-slider {
+            -webkit-appearance: none;
+            width: 50px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            cursor: pointer;
+        }
+        .music-volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--gold);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+        }
+        .settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9991;
+            background: rgba(15, 0, 5, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .settings-btn:hover { background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 20px rgba(255, 255, 255, 0.15); transform: rotate(60deg); }
+        #settingsOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 99995;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: all 0.5s ease;
+            padding: 1rem;
+        }
+        #settingsOverlay.active { opacity: 1; visibility: visible; pointer-events: all; }
+        #settingsPanel {
+            background: rgba(20, 2, 8, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 1.8rem;
+            width: 100%; max-width: 550px; max-height: 85vh;
+            overflow-y: auto;
+            color: #fff;
+            direction: rtl;
+            text-align: right;
+        }
+        #settingsPanel h2 { font-family: var(--font-title); color: var(--gold); text-align: center; margin-bottom: 1.2rem; font-size: 1.5rem; }
+        #settingsPanel label { display: block; font-size: 0.85rem; color: var(--soft-pink); margin: 0.8rem 0 0.3rem; font-weight: 600; }
+        #settingsPanel input, #settingsPanel textarea, #settingsPanel select {
+            width: 100%; padding: 0.6rem 0.8rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        #settingsPanel input:focus, #settingsPanel textarea:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); outline: none; }
+        #settingsPanel textarea { min-height: 100px; resize: vertical; font-size: 0.8rem; line-height: 1.8; }
+        #settingsPanel .btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; justify-content: center; }
+        #settingsPanel button {
+            font-family: var(--font-body);
+            padding: 0.6rem 1.4rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+        .btn-save { background: linear-gradient(135deg, var(--crimson), var(--primary)); }
+        .btn-reset { background: rgba(255, 255, 255, 0.08); }
+        .btn-close { background: rgba(255, 255, 255, 0.05); }
+        .btn-rescan { background: rgba(212, 175, 55, 0.2); border-color: rgba(212, 175, 55, 0.4); }
+        #settingsPanel button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); }
+        #secretOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at center, #1a0000 0%, #000000 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        #secretOverlay.active { opacity: 1; visibility: visible; pointer-events: all; }
+        #secretOverlay .secret-line {
+            font-family: var(--font-title);
+            font-size: clamp(1rem, 2.5vw, 1.7rem);
+            color: var(--white);
+            text-align: center;
+            opacity: 0; transform: translateY(35px);
+            transition: all 0.8s var(--transition-smooth);
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+            line-height: 2;
+            max-width: 600px;
+        }
+        #secretOverlay .secret-line.show { opacity: 1; transform: translateY(0); }
+        #secretOverlay .secret-line.golden { color: var(--gold); font-size: clamp(1.4rem, 3.5vw, 2.4rem); font-weight: 700; text-shadow: 0 0 45px rgba(212, 175, 55, 0.8); }
+        #secretOverlay .secret-line.rose { color: var(--rose-red); font-weight: 700; text-shadow: 0 0 35px rgba(220, 20, 60, 0.7); }
+        #secretOverlay .secret-final {
+            font-family: var(--font-title);
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            color: var(--gold);
+            text-align: center;
+            opacity: 0; transform: translateY(35px);
+            transition: all 0.9s var(--transition-smooth);
+            text-shadow: 0 0 50px rgba(212, 175, 55, 0.9);
+            font-weight: 700;
+            max-width: 600px;
+            line-height: 2;
+        }
+        #secretOverlay .secret-final.show { opacity: 1; transform: translateY(0); }
+        .action-buttons { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+        .action-btn {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .action-btn:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
+        .final-msg { font-size: 0.9rem; color: var(--soft-pink); opacity: 0.7; text-align: center; padding: 1rem; }
+        .heart-ripple {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(255, 60, 90, 0.5);
+            pointer-events: none;
+            z-index: 9998;
+            animation: rippleExpand 0.8s ease-out forwards;
+        }
+        @keyframes rippleExpand {
+            0% { width: 30px; height: 30px; opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            100% { width: 250px; height: 250px; opacity: 0; transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes burstFly {
+            0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--bx), var(--by)) scale(0.2) rotate(var(--br)); }
+        }
+        @media (max-width: 480px) {
+            #mainContainer { padding: 1rem 0.6rem 3.5rem; gap: 1.8rem; }
+            .glass-card { padding: 1.3rem 0.9rem; border-radius: 22px; }
+            .counter-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+            .music-controller { bottom: 10px; right: 4px; padding: 0.35rem 0.5rem; gap: 0.2rem; border-radius: 30px; }
+            .music-volume-slider { width: 35px; }
+            .slider-container { max-width: 240px; }
+            .settings-btn { top: 10px; right: 8px; width: 36px; height: 36px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- LOADING -->
+    <div id="loadingOverlay">
+        <div class="load-line1" id="loadLine1">محمود ❤️ نونو</div>
+        <div class="load-line2" id="loadLine2">اضغطي لبدء رحلة حبنا</div>
+        <button class="load-btn" id="loadBtn">✨ ابدأي الرحلة ✨</button>
+    </div>
+
+    <!-- SETTINGS BUTTON -->
+    <button class="settings-btn" id="settingsBtn" title="الإعدادات">⚙️</button>
+
+    <!-- SETTINGS OVERLAY -->
+    <div id="settingsOverlay">
+        <div id="settingsPanel">
+            <h2>⚙️ الإعدادات</h2>
+            <label>اسمها</label>
+            <input type="text" id="setHerName" placeholder="نادين">
+            <label>اللقب (الدلع)</label>
+            <input type="text" id="setHerNickname" placeholder="نونو">
+            <label>اسمه</label>
+            <input type="text" id="setHisName" placeholder="محمود">
+            <label>تاريخ بداية العلاقة</label>
+            <input type="date" id="setRelDate">
+            <label>الرسالة الافتتاحية في شاشة التحميل</label>
+            <input type="text" id="setOpenMsg" placeholder="اضغطي لبدء رحلة حبنا">
+            <label>روابط الصور (رابط في كل سطر)</label>
+            <textarea id="setImages" placeholder="سيتم تحميل الصور من images.json تلقائياً"></textarea>
+            <label>روابط الموسيقى (رابط MP3 في كل سطر)</label>
+            <textarea id="setMusic" placeholder="سيتم تحميل الموسيقى من music.json تلقائياً"></textarea>
+            <label>لون الثيم الأساسي</label>
+            <input type="color" id="setThemeColor" style="width:60px;height:40px;padding:2px;">
+            <label>الرسائل الرومانسية (100 رسالة، كل سطر = رسالة)</label>
+            <textarea id="setMessages" rows="8" placeholder="اتركه فارغاً لاستخدام الرسائل الافتراضية"></textarea>
+            <div class="btn-row">
+                <button class="btn-save" id="btnSaveSettings">💾 حفظ الإعدادات</button>
+                <button class="btn-rescan" id="btnRescan">🔍 إعادة تحميل الصور والموسيقى من JSON</button>
+                <button class="btn-reset" id="btnResetSettings">🔄 استعادة الافتراضي</button>
+                <button class="btn-close" id="btnCloseSettings">✖ إغلاق</button>
+            </div>
+            <p style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:0.8rem;">يتم تحميل الصور والموسيقى من ملفات images.json و music.json بجانب index.html</p>
+        </div>
+    </div>
+
+    <!-- SECRET OVERLAY -->
+    <div id="secretOverlay"></div>
+
+    <!-- MAIN -->
+    <div id="mainContainer">
+        <div class="glass-card title-section">
+            <h1>الى اجمل بنت في الدنيا</h1>
+            <div class="name-main" id="displayHerName">نادين ❤️</div>
+            <div class="nickname" id="displayNickname">نونو ❤️</div>
+            <p class="subtitle">كل ضغطة على القلب فيها جزء من حبي ليكي</p>
+        </div>
+        <div class="glass-card" id="heartCard">
+            <div class="heart-svg-container" id="heartContainer">
+                <svg viewBox="0 0 100 90" id="mainHeartSvg">
+                    <defs>
+                        <radialGradient id="heartGrad" cx="50%" cy="30%" r="60%">
+                            <stop offset="0%" stop-color="#ff4d6a"/>
+                            <stop offset="40%" stop-color="#e8304a"/>
+                            <stop offset="75%" stop-color="#b81a35"/>
+                            <stop offset="100%" stop-color="#6e0015"/>
+                        </radialGradient>
+                        <filter id="heartGlow">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <path d="M50 85 C20 60 5 45 5 28 C5 14 15 4 28 4 C36 4 43 8 50 16 C57 8 64 4 72 4 C85 4 95 14 95 28 C95 45 80 60 50 85Z" fill="url(#heartGrad)" filter="url(#heartGlow)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                    <ellipse cx="35" cy="22" rx="8" ry="5" fill="rgba(255,255,255,0.25)" transform="rotate(-20 35 22)"/>
+                </svg>
+                <button class="love-btn" id="loveBtn">بحبك ❤️</button>
+                <div><p class="message-text" id="messageText">اضغطي على القلب يا نونو ❤️</p></div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+                <p class="progress-label" id="progressLabel">رسائل الحب 0 / 100 ❤️</p>
+            </div>
+        </div>
+        <div class="glass-card counter-section">
+            <p style="font-family:var(--font-title);font-size:clamp(1rem,2.5vw,1.4rem);color:var(--gold);text-shadow:0 0 25px rgba(212,175,55,0.5);" id="counterDateLabel">عارفين بعض من 1/1/2025 ❤️</p>
+            <p style="color:var(--soft-pink);font-size:0.95rem;">❤️ بقالنا</p>
+            <div class="counter-grid">
+                <div class="counter-item"><span class="counter-number" id="counterDays">0</span><span class="counter-unit">يوم</span></div>
+                <div class="counter-item"><span class="counter-number" id="counterHours">0</span><span class="counter-unit">ساعة متبقية</span></div>
+                <div class="counter-item"><span class="counter-number" id="counterMinutes">0</span><span class="counter-unit">دقيقة متبقية</span></div>
+                <div class="counter-item"><span class="counter-number" id="counterSeconds">0</span><span class="counter-unit">ثانية متبقية</span></div>
+            </div>
+        </div>
+        <div class="glass-card photo-section">
+            <p style="font-family:var(--font-title);font-size:1.1rem;color:var(--gold);margin-bottom:1rem;text-shadow:0 0 18px rgba(212,175,55,0.5);">صورتنا هنا ❤️</p>
+            <div class="slider-container" id="sliderContainer">
+                <div class="slider-slides" id="sliderSlides"><div class="slider-slide"><span class="slider-placeholder">📷❤️</span></div></div>
+                <button class="slider-nav prev" id="sliderPrev">❮</button>
+                <button class="slider-nav next" id="sliderNext">❯</button>
+            </div>
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn" id="shareBtn">📤 مشاركة</button>
+            <button class="action-btn" id="screenshotBtn">📸 حفظ الصورة</button>
+        </div>
+        <div class="final-msg"><p>Made with ❤️ by <span id="displayHisName">محمود</span></p></div>
+    </div>
+
+    <!-- MUSIC CONTROLLER -->
+    <div class="music-controller" id="musicController">
+        <button class="music-btn" id="musicPrevBtn" title="السابق">⏮</button>
+        <button class="music-btn" id="musicPlayBtn" title="تشغيل">▶</button>
+        <button class="music-btn" id="musicNextBtn" title="التالي">⏭</button>
+        <button class="music-btn" id="musicShuffleBtn" title="عشوائي">🔀</button>
+        <button class="music-btn" id="musicRepeatBtn" title="تكرار">🔁</button>
+        <span class="song-name" id="songNameDisplay">--</span>
+        <span style="color:#fff;font-size:0.65rem;">🔊</span>
+        <input type="range" class="music-volume-slider" id="musicVolume" min="0" max="100" value="50" title="مستوى الصوت">
+    </div>
+
+    <audio id="bgMusic" preload="auto" loop style="display:none;"></audio>
+
+    <script>
+        (function() {
+            // ==================== DEFAULT SETTINGS ====================
+            const DEFAULT_SETTINGS = {
+                herName: 'نادين',
+                herNickname: 'نونو',
+                hisName: 'محمود',
+                relationshipStart: '2025-01-01',
+                openingMessage: 'اضغطي لبدء رحلة حبنا',
+                themeColor: '#8B0000',
+                images: [],
+                music: [],
+                customMessages: []
+            };
+
+            const DEFAULT_LOVE_MESSAGES = [
+                "بحبك يا نونو حب مش طبيعي، حب مالوش حدود ولا نهاية، انتي الحاجة الوحيدة اللي مخلية قلبي يدق ومعرفش اعيش من غيرها. كل يوم بيمر عليا وانا جنبك بحس ان ربنا كرمني بأجمل هدية في الدنيا، وانا مش هضيعك من ايدي ابدا",
+                "نونو يا احلى صدفة في حياتي، انتي النور اللي دخل قلبي من غير ميعاد وغير كل حاجة. قبل ما اعرفك كنت تايه، واول ما شوفتك عرفت انك الشخص اللي كنت مستنيه طول عمري. بحبك لدرجة اني بخاف عليكي من الهوا",
+                "انتي مش بس حبيبتي يا نونو، انتي روحي التانية، انتي التوأم اللي مكملني، الانسانة الوحيدة اللي بتفهمني من غير كلام. كل نظرة من عيونك بتقولي حكاية، وكل ابتسامة منك بتخليني احس اني ملك الدنيا كلها",
+                "ضحكتك يا نونو هي اجمل موسيقى سمعتها في حياتي، لما بتضحكي الدنيا كلها بتوقف وانا ببصلك وقلبي بيدق جامد. صوتك وهو بينادي اسمي بيخليني احس اني اهم انسان في الكون، بحبك يا روحي",
+                "عيونك يا نونو بحر من الحنية والامان، كل ما ابص فيها بلاقي نفسي هناك، بلاقي روحي مرتاحة ومطمنة. انتي المكان الوحيد اللي بحس فيه اني في بيتي، اني محمي، اني متحاب بجد من غير شروط",
+                "انتي الهدية اللي ربنا بعتهالي عشان تعوضي عن كل تعب السنين اللي فاتت. شكرا ليكي يا نونو على كل لحظة حلوة، على كل ضحكة، على كل مرة كنتي فيها جنبي. وجودك في حياتي مش رفاهية ده ضرورة اساسية",
+                "نونو يا قطعة من قلبي، حبك جوايا بيكبر كل يوم بطريقة مش معقولة. كل صبح بصحى وانا بحبك اكتر من امبارح، وكل ليلة بنام وانا بحبك اكتر من الصبح. الحب ده مالوش سقف، مالوش نهاية، انتي سر الحياة الحلوة",
+                "مهما الدنيا اخدتني في طرقها البعيدة، قلبي دايما بيرجعلك يا نونو. انتي البوصلة اللي بتوجهني، النجم اللي بنور بيه طريقي في الليل. من غيرك انا ضايع، تايه، مش عارف اروح فين. بحبك يا دليلي",
+                "انتي مش مجرد حبيبة يا نونو، انتي الصحبة الحلوة، الونس، الضحكة الصافية، الكتف اللي بسند عليه. انتي كل حاجة حلوة في دنيتي متجمعة في انسانة واحدة. ربنا يخليكي ليا ويبعد عنك اي شر",
+                "كل مرة بشوفك فيها بحس اني بشوفك اول مرة، نفس دقة القلب، نفس الفرحة اللي بتملى صدري، نفس النظرة اللي بتقولك انتي اجمل ما خلق ربنا. والله يا نونو انتي سحر، انتي حلم، انتي الحقيقة الوحيدة اللي عايز اعيشها",
+                "صوتك يا نونو وهو بيهملي في التليفون بيخليني انسى كل همومي. كأن صوتك فيه دوا، فيه راحة، فيه حنية بتغسل القلب. بحب اسمعك وانت بتحكيلي عن يومك، بحب اسمع ضحكتك، بحب اسمع نفسك وانت جنبي",
+                "جمالك يا نونو مش بس في شكلك الرقيق، جمالك في قلبك الطيب، في اخلاقك العالية، في حنيتك اللي ملهاش حدود. انتي انسانة كاملة متكاملة، وانا فخور اني معاكي، فخور انك اختارتيني من كل الناس",
+                "بحلفلك يا نونو باللي خلقني اني عمري ما هقدر انسى ولا لحظة حلوة عدت عليا معاكي. كل ذكرى معاكي محفورة جوايا، كل كلمة حلوة، كل خروجة، كل ضحكة، كل لحظة شوق وانتظار. انتي تاريخي الجميل",
+                "نونو، انتي اللي علمتيني يعني ايه حب حقيقي. قبل ما اشوفك كنت فاكر اني عارف، بس انتي نورتيني وفهمتيني قد ايه كنت غلطان. الحب الحقيقي هو انتي، هو كل حاجة فيكي، هو وجودك اللي بيدي معنى لحياتي",
+                "انتي الحلم اللي اتمنيته من زمان وربنا حققهولي. كنت بدعي في كل صلاة ان ربنا يرزقني بواحدة زيك، وربنا استجاب واداني احلى ما عنده. الحمد لله على نعمة وجودك في حياتي يا نونو",
+                "كل ليلة قبل ما انام بدعي ربنا يحفظك ويخليكي ليا. انتي اخر حاجة بفكر فيها قبل ما انام، وانتي اول حاجة بتجيلي على بالي لما بفتح عيني. انتي شاغلة بالي وتفكيري وقلبي على طول",
+                "بحب غيرتك عليا يا نونو، بحب حبك ليا، بحب خوفك عليا. كل ده بيأكدلي كل يوم انك انسانة بتحبي بجد ومن قلبك. وانا كمان بحبك بجد، بحبك لدرجة اني مستعد اكون جنبك في كل وقت",
+                "نونو، انتي الهدوء في وسط عاصفة الحياة، انتي السلام اللي بيدور عليه قلبي لما بيتعب. لما بحضنك بحس ان كل حاجة وحشة بتروح، بحس اني محمي، اني في امان، اني مش لوحدي ابدا",
+                "انتي النجمة اللي بتنورلي السما في الليل، القمر اللي بينور طريقي، الشمس اللي بتدفيني في عز البرد. انتي كل الفصول الحلوة متجمعة، انتي الربيع والخريف، انتي الصيف والشتاء",
+                "نونو، كل همسة منك بتخليني اعشقك اكتر، كل لمسة من ايديكي بتخليني احس بالدفىء، كل نظرة من عيونك بتخليني اتوه في بحر من الحب. انتي سحر خاص بيكي لوحدك",
+                "انتي القطعة الناقصة اللي كملت قلبي، قبل ما تشوفي كنت انسان ناقص وحاسس ان في حاجة ضايعة مني. واول ما دخلتي حياتي عرفت انك انتي الحتة اللي كانت ناقصة",
+                "بحبك يا نونو بكل ما في الكلمة من معنى، بحبك وانا مش قادر اتخيل حياتي من غيرك. كل ما بفكر في المستقبل بشوفك معايا، بشوفنا سوا بنكبر، بشوف بيتنا وعيالنا",
+                "نونو، لما بتغني او بتدندني وانت مش واخدة بالك، بحس اني في الجنة. صوتك فيه حنية ودفء وامل، بيخليني احلم واسرح وافكر فيكي اكتر. بحب صوتك وهو بيهمس، بحب صوتك وهو بينادي",
+                "كل يوم بعدي من غير ما اشوفك فيه بكون ناقصني حاجة كبيرة، بكون مش طبيعي. وجودك معايا مش رفاهية يا نونو، وجودك ضرورة، انتي زي المية والهوا، من غيرك مش هعيش",
+                "انتي تستاهلي الدنيا كلها يا نونو، تستاهلي القمر لو كنت اقدر اجيبه. بس كل اللي اقدر اعمله اني ادييكي قلبي، ادييكي كل حبي واهتمامي، ادييكي عمري كله",
+                "نونو، انتي مش اي حد، انتي الحد. انتي البداية والنهاية، انتي الالف والياء، انتي اول حاجة واخر حاجة في حياتي. كل الطرق بتوصل ليكي، كل الحكايات بتبدأ وتنتهي عندك",
+                "بحب نظراتك الخجولة يا نونو، بحب حركاتك البريئة، بحب طريقة مشيك وطريقة كلامك. كل تفصيلة فيكي بحبها، كل حاجة فيكي عاجباني. مفيش حاجة فيكي مش عاجباني",
+                "شوفتك في الحلم قبل ما اشوفك في الحقيقة، وربنا حققلي الحلم. كنت دايما بحلم بواحدة زيك، حنينة وجميلة وذكية وطيبة، وربنا جمعني بيكي. الحمد لله",
+                "انتي اللي خليتيني احس اني مهم، ان في حد بيهتم بيا وبيسأل عليا. قبل ما اعرفك كنت حاسس اني وحيد، بس انتي جيتي وملتي الفراغ اللي كان جوايا. شكرا ليكي يا نونو",
+                "نونو، بحبك لدرجة اني بدعي في كل صلاة ربنا يجمعني بيكي على خير، ويخليكي ليا وما يحرمنيش منك ابدا. انتي اغلى ما عندي، وانا مش همشي من جنبك مهما حصل",
+                "كل ما بقول بحبك بحس اني مقصر في حقك، الكلمة دي صغيرة اوي على اللي جوايا ناحيتك. انا عايز اقولك حاجة اكبر من بحبك، حاجة توصف اللي بحس بيه",
+                "انتي الامان يا نونو، انتي السند، انتي الضهر اللي بسند عليه. معاكي بحس اني اقوى، بحس اني اقدر اواجه العالم كله. انتي بتديني قوة مش طبيعية",
+                "بحبك وانا واثق ان حبنا ده مكتوب عند ربنا، لان مفيش حاجة بالجمال ده تيجي صدفة. ربنا هو اللي جمعنا، وهو اللي هيخلينا نكمل مع بعض",
+                "نونو، انتي الشخص اللي بشتاقله وهو قدامي. شوقي ليكي مالوش حدود، حتى وانا ماسك ايديكي بشتاقلك. ده حب مش طبيعي، حب بيخليني عايز اكون معاكي في كل لحظة",
+                "انتي اللي تستاهلي اضحي عشانها، تستاهلي اسهر واتعب واعمل المستحيل. مستحيل اقولك لا على حاجة، مستحيل اخذلك. انتي عندي اهم من اي حاجة في الدنيا",
+                "بحبك يا نونو وانتي بعيدة عني زي ما بحبك وانتي جنبي. المسافة مبتفرقش في حبنا، بعدك بيخليني احبك اكتر، بيخليني مقدر قيمتك اكتر",
+                "نونو، انتي اللي خلتيني اعرف ان الحب مش مجرد كلمة، الحب فعل وحياة وتضحية وعطاء. علمتيني ازاي احب من غير ما استنى مقابل",
+                "كل يوم معاكي هو عيد، كل لحظة معاكي هي هدية من ربنا. مبقتش مستني المناسبات عشان افرح، لان وجودك معايا هو الفرحة نفسها",
+                "انتي اللي تستاهلي اشيلك في عيني، تستاهلي احطك جوا قلبي وتحتها بوسادة من ورد. انتي ملكة في عيوني، اميرة في قلبي، وست الكل في حياتي",
+                "نونو، انا بعشق جنونك وهدوئك، بعشق تقلباتك ومزاجك. بحبك وانتي هادية، بحبك وانتي معصبة، بحبك في كل اوقاتك. انتي انسانة حقيقية",
+                "ربنا يخليكي ليا يا نونو ويبعد عنك كل شر ويحققلك كل امانيكي. انتي تستاهلي كل خير، تستاهلي السعادة والنجاح والحب",
+                "انتي اللي بفكر فيكي طول اليوم، وانتي في الشغل، وانتي في الطريق، وانتي قبل ما انام. خيالك مش بيغيب عن بالي ثانية، دايما موجود",
+                "نونو، بحب طريقة تفكيرك وذكائك وثقافتك. انتي مش بس جميلة من برا، انتي جميلة من جوا، عندك عقل كبير وقلب اكبر. بحب اتعلم منك",
+                "انتي الحكاية الحلوة اللي هحكيها لكل الناس، قصة حبنا تستاهل تتكتب بماء الورد. هحكي لولادنا واحفادنا ازاي قابلتك وازاي حبيتك",
+                "بحبك يا نونو لدرجة اني لو اقدر اجبلك القمر كنت جبته من السما. بس هديكي قلبي بداله، هديكي كل حبي واخلاصي، هديكي عمري كله",
+                "كل ما اشوف اسمك على شاشة الموبايل قلبي بيفرح، حتى بعد كل المدة دي الفرحة مبتخلصش. لسة بستناك تكلميني بنفس الشوق",
+                "نونو، انتي اللي تستاهلي اعمللك مفاجآت كل يوم، تستاهلي احاول ارسم البسمة على وشك الحلو. بفرح لما بفرحك، وبحزن لما بزعلك",
+                "انتي الشخص الوحيد اللي بيفهمني من غير ما اتكلم، اللي بيعرف انا زعلان ولا مبسوط من نظرة عين. ودي حاجة نادرة جداً في الناس",
+                "بحبك وانا حاسس اني محظوظ جداً، يمكن اكتر واحد محظوظ في الدنيا كلها. لان في زمن الحب فيه بقى صعب، ربنا رزقني بواحدة زيك",
+                "نونو، انتي البداية الحلوة بتاعة 2025، ومن ساعتها وانا في حلم جميل مش عايز اصحى منه. السنة الجديدة جت ومعاها اجمل هدية",
+                "انتي اللي بتخليني احب الصبح، استنى بفارغ الصبر عشان اكلمك واشوفك. قبل ما اعرفك كنت بكره الصبح، بس دلوقتي الصبح بقى احلى وقت",
+                "كل كلمة حلوة بتقوليها بتدخل قلبي علطول، كلامك ليه وقع خاص عليا. انتي بتعرفي تقولي الكلام في وقته، بتعرفي تلمسي القلب",
+                "نونو، انا هفضل جنبك طول العمر، اسندك واحبك واحترمك واحميكي من اي حاجة. ده وعد مني ليكي قدام ربنا، اني هكون ليكي الزوج والصاحب",
+                "انتي اللي خليتيني احس بقيمة الحياة، وان الدنيا ممكن تكون جميلة فعلاً. قبل ما اعرفك كنت شايف الدنيا سودة، بس انتي نورتيها",
+                "بحب شهامتك ووقوفك جنبي في المواقف الصعبة. انتي مش بس حبيبتي، انتي رفيقة الدرب، انتي اللي بشد حيلي عشانها",
+                "نونو، انتي اجمل هدية من ربنا، وانا مش همشي من جنبك ابدا. هفضل معاكي في السراء والضراء، في الصحة والمرض",
+                "بحبك لانك انتي، مش لسبب معين. بحبك عشان انتي نونو، وبس. مفيش سبب واحد لحبي ليكي، في مليون سبب",
+                "انتي اللي بحلم اكمل عمري معاها، ونبني بيت واسرة صغيرة جميلة. بحلم اسافر معاكي، نشوف العالم سوا",
+                "نونو، مهما قلت وشعرت وكتبت، عمري ما هقدر اوصفلك حبي ليكي. الكلام يقف عاجز قدام اللي في قلبي",
+                "كل ضحكة منك بتخليني احب الحياة اكتر، كل دمعة من عيونك بتوجعلي قلبي. انا مرتبط بيكي لدرجة ان مشاعرك بقت مشاعري",
+                "انتي مش ذكرى حلوة في حياتي، انتي حياتي كلها. مفيش حاجة قبل ما اعرفك تستاهل تتحكى. حياتي الحقيقية بدأت من اليوم اللي شوفتك فيه",
+                "بحبك يا نونو، ودي رسالتي المية، بس حبي ليكي اكتر من مليون رسالة. الكلام ممكن يخلص، بس حبي ليكي عمره ما هيخلص",
+                "نونو، انتي اللي غيرتي حياتي للاحسن، خلتيني احسن انسان، خلتيني اعرف انا عايز ايه من الدنيا. انتي الهدف، انتي الغاية",
+                "بحب احساسي وانا جنبك، بحب الطمأنينة اللي بتيجيلي معاكي. انتي بتخلي الدنيا اسهل، بتخلي المشاكل اصغر، بتخلي كل حاجة احلى",
+                "انتي مش بس جميلة يا نونو، انتي ذكية وطموحة ومجتهدة. بفخر بيكي قدام كل الناس، وبحب احكي عنك وعن انجازاتك",
+                "نونو، انتي الشخص اللي بيثق فيا لما بفقد الثقة في نفسي. انتي اللي بتشجعيني وبتدفعيني للأمام. من غيرك كنت هوقف من زمان",
+                "بحبك لدرجة اني بتخض من قوة المشاعر دي. عمري ما حسيت بحاجة زي كده قبل كده. انتي غيرتي كل مفاهيمي عن الحب",
+                "انتي اللي تستاهلي اني اكتبلك شعر، اني اغني لك، اني ارسملك. تستاهلي كل فنون الدنيا تتجمع عشان تعبر عن جمالك",
+                "نونو، ربنا يخليكي ليا ويحفظك. انتي اغلى من روحي، ولو اقدر افديكي بعمري ما هتردد. بحبك اكتر من اي حاجة",
+                "كل صورة من صورنا مع بعض بتحكي قصة. كل ابتسامة في الصور دي حقيقية، كل لحظة عشناها سوا كانت بجد. بحب ذكرياتنا",
+                "انتي اللي بتخلي البيت له معنى، اللي بتخلي الرجوع من الشغل حاجة مستنية. بحب وجودك، بحب ريحتك، بحب كل حاجة عنك",
+                "نونو، انتي النعمة اللي بشكر ربنا عليها كل يوم. الحمد لله انه رزقني بيكي، الحمد لله انه اختارني اكون معاكي",
+                "بحب تفاصيل وشك وانت بتتكلمي، بحب تعابيرك وانت بتفكري، بحب كل حركة منك. انتي فيلم سينمائي بتفرج عليه كل يوم",
+                "انتي اللي تستاهلي الدنيا وما فيها، تستاهلي السعادة الابدية. وانا هحاول طول عمري اخليكي مبسوطة وراضية",
+                "نونو، قلبي اختارك من وسط مليون بنت. وعقلي وافق وروحي فرحت. كل كياني متفق انك انتي الشخص الصح",
+                "بحبك وانا صاحي وبحبك وانا نايم. بحلم بيكي في المنام، وبفكر فيكي طول اليوم. انتي مسيطرة على حياتي بشكل جميل",
+                "انتي اللي بتخلي الايام تعدي بسرعة، لان كل لحظة معاكي ممتعة. الزمن بيقف لما تكوني بعيدة، وبيجري لما نكون سوا",
+                "نونو، انتي اجمل هدية جاتلي في 2025. ومن وقتها وانا كل سنة احتفل بيكي، كل يوم احتفل بوجودك، كل لحظة بشكر ربنا عليكي",
+                "بحبك لدرجة اني خايف اكتب كل اللي جوايا. الكلام لو خرج كله هتبقي الدنيا كلها ورد وفل. انتي سر الحياة الحلوة",
+                "انتي اللي تستاهلي اني اتعلم عشانك، اشتغل عشانك، احسن من نفسي عشانك. انتي دافعي للتطور، انتي وقودي للنجاح",
+                "نونو، مهما الدنيا دارت بينا، هفضل ماسك في ايديكي. مش هسيبك ابدا، مش هتوهي مني. احنا مع بعض للاخر",
+                "بحب طيبتك مع الناس، بحب تعاملك مع الكل. انتي انسانة محترمة ومحترفة وكل اللي يعرفك بيحبك. انا فخور اني معاكي",
+                "انتي اللي بتخلي الشتاء دافي، والصيف منعش، والخريف رومانسي، والربيع اجمل. انتي كل المواسم في انسانة واحدة",
+                "نونو، انا مش عايز حاجة من الدنيا غيرك. كل حاجة تانية ممكن تتعوض، بس انتي لا. انتي الوحيدة اللي مش هقدر اعيش من غيرها",
+                "بحبك لانك بتعرفي تسمعي، بتعرفي تحسي، بتعرفي تفهمي. انتي مش اي حد، انتي انسانة نادرة في زمن مليان سطحية",
+                "كل ما بسمع اغنية حلوة بفكر فيكي، كل ما بشوف منظر جميل بفكر فيكي. الدنيا كلها بقت بتفكرني بيكي",
+                "نونو، انتي اللي تخلي الواحد يتمنى يعيش الف سنة عشان يفضل معاكي. العمر كله مش كفاية معاكي، انا عايز اكتر واكتر",
+                "بحب نظرة عيونك لما بتفرحي، بحب بريقهم لما بتستغربي، بحب دموعهم لما بتتأثري. عيونك دي عالم كامل",
+                "انتي اللي تستاهلي اني اشتريلك هدايا كل يوم، مش بس في المناسبات. كل يوم معاكي مناسبة تستاهل الهدايا",
+                "نونو، انا ممتن لكل لحظة، لكل ثانية، لكل نفس عشناه مع بعض. ممتن لربنا انه جمعنا، وممتن ليكي انك قبلتيني",
+                "بحبك يا نونو حب يفوق الوصف، يفوق الخيال، يفوق اي حاجة اتكتبت في اي كتاب. حبنا ده اسطورة، حكاية عمرها ما تتنسي",
+                "انتي اللي خليتيني اعرف ان السعادة مش في حاجات كبيرة، السعادة في حضن دافي، في ضحكة صافية، في كلمة حلوة منك",
+                "نونو، وعد مني قدام ربنا والناس اني هفضل احبك واقدرك واحترمك واخاف عليكي طول ما انا عايش. انتي امانة في رقبتي"
+            ];
+
+            // ==================== LOAD SETTINGS ====================
+            function loadSettings() {
+                try {
+                    const saved = localStorage.getItem('loveSiteSettings');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        return { ...DEFAULT_SETTINGS, ...parsed };
+                    }
+                } catch (e) {}
+                return { ...DEFAULT_SETTINGS };
+            }
+
+            function saveSettings(settings) {
+                try {
+                    localStorage.setItem('loveSiteSettings', JSON.stringify(settings));
+                } catch (e) {}
+            }
+
+            let settings = loadSettings();
+
+            // ==================== LOAD JSON FILES ====================
+            async function loadJSON(filename) {
+                try {
+                    const response = await fetch(filename);
+                    if (!response.ok) throw new Error('Not found');
+                    const data = await response.json();
+                    return data;
+                } catch (e) {
+                    console.warn('Could not load ' + filename + ', using defaults.');
+                    return null;
+                }
+            }
+
+            async function loadExternalMedia() {
+                // If settings have already been customized and saved, we keep them.
+                // Otherwise, we try to load from JSON files.
+                const savedSettings = loadSettings();
+                const hasCustomImages = savedSettings.images && savedSettings.images.length > 0;
+                const hasCustomMusic = savedSettings.music && savedSettings.music.length > 0;
+
+                if (!hasCustomImages) {
+                    const imagesData = await loadJSON('images.json');
+                    if (imagesData && imagesData.images && Array.isArray(imagesData.images)) {
+                        settings.images = imagesData.images;
+                    } else {
+                        // fallback default
+                        settings.images = ['images/1.jpg', 'images/2.jpg', 'images/3.jpg'];
+                    }
+                }
+
+                if (!hasCustomMusic) {
+                    const musicData = await loadJSON('music.json');
+                    if (musicData && musicData.music && Array.isArray(musicData.music)) {
+                        settings.music = musicData.music;
+                    } else {
+                        // fallback default
+                        settings.music = ['music/love.mp3'];
+                    }
+                }
+
+                // Save the merged settings back (to avoid re-fetching if unchanged)
+                saveSettings(settings);
+            }
+
+            // ==================== APPLY SETTINGS TO UI ====================
+            function applySettingsToUI() {
+                document.getElementById('displayHerName').textContent = settings.herName + ' ❤️';
+                document.getElementById('displayNickname').textContent = settings.herNickname + ' ❤️';
+                document.getElementById('displayHisName').textContent = settings.hisName;
+                document.getElementById('loadLine1').textContent = settings.hisName + ' ❤️ ' + settings.herNickname;
+                document.getElementById('loadLine2').textContent = settings.openingMessage;
+                const relStart = getRelationshipStart();
+                const d = relStart.getDate();
+                const m = relStart.getMonth() + 1;
+                const y = relStart.getFullYear();
+                document.getElementById('counterDateLabel').textContent = 'عارفين بعض من ' + d + '/' + m + '/' + y + ' ❤️';
+                document.documentElement.style.setProperty('--primary', settings.themeColor);
+                document.documentElement.style.setProperty('--primary-rgb', hexToRgb(settings.themeColor) || '139,0,0');
+                document.getElementById('messageText').textContent = 'اضغطي على القلب يا ' + settings.herNickname + ' ❤️';
+                document.getElementById('loveBtn').textContent = 'بحبك ❤️';
+            }
+
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? parseInt(result[1], 16) + ',' + parseInt(result[2], 16) + ',' + parseInt(result[3], 16) : null;
+            }
+
+            function getRelationshipStart() {
+                if (settings.relationshipStart) {
+                    const d = new Date(settings.relationshipStart + 'T00:00:00');
+                    if (!isNaN(d.getTime())) return d;
+                }
+                return new Date(2025, 0, 1);
+            }
+
+            function getLoveMessages() {
+                if (settings.customMessages && settings.customMessages.length >= 100) {
+                    return settings.customMessages.slice(0, 100);
+                }
+                return [...DEFAULT_LOVE_MESSAGES];
+            }
+
+            // ==================== INITIALIZE AFTER JSON LOAD ====================
+            async function initializeApp() {
+                await loadExternalMedia();
+                applySettingsToUI();
+                buildSlider();
+                buildMusicPlaylist();
+                resetMessagePool();
+                updateCounter();
+                fillSettingsForm();
+            }
+
+            // ==================== DOM ELEMENTS ====================
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadLine2 = document.getElementById('loadLine2');
+            const loadBtn = document.getElementById('loadBtn');
+            const mainContainer = document.getElementById('mainContainer');
+            const bgCanvas = document.getElementById('bgCanvas');
+            const ctx = bgCanvas.getContext('2d');
+            const heartContainer = document.getElementById('heartContainer');
+            const mainHeartSvg = document.getElementById('mainHeartSvg');
+            const loveBtn = document.getElementById('loveBtn');
+            const messageText = document.getElementById('messageText');
+            const progressFill = document.getElementById('progressFill');
+            const progressLabel = document.getElementById('progressLabel');
+            const secretOverlay = document.getElementById('secretOverlay');
+            const counterDays = document.getElementById('counterDays');
+            const counterHours = document.getElementById('counterHours');
+            const counterMinutes = document.getElementById('counterMinutes');
+            const counterSeconds = document.getElementById('counterSeconds');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicPlayBtn = document.getElementById('musicPlayBtn');
+            const musicPrevBtn = document.getElementById('musicPrevBtn');
+            const musicNextBtn = document.getElementById('musicNextBtn');
+            const musicShuffleBtn = document.getElementById('musicShuffleBtn');
+            const musicRepeatBtn = document.getElementById('musicRepeatBtn');
+            const musicVolume = document.getElementById('musicVolume');
+            const songNameDisplay = document.getElementById('songNameDisplay');
+            const sliderSlides = document.getElementById('sliderSlides');
+            const sliderDots = document.getElementById('sliderDots');
+            const sliderPrev = document.getElementById('sliderPrev');
+            const sliderNext = document.getElementById('sliderNext');
+            const shareBtn = document.getElementById('shareBtn');
+            const screenshotBtn = document.getElementById('screenshotBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsOverlay = document.getElementById('settingsOverlay');
+            const btnSaveSettings = document.getElementById('btnSaveSettings');
+            const btnCloseSettings = document.getElementById('btnCloseSettings');
+            const btnResetSettings = document.getElementById('btnResetSettings');
+            const btnRescan = document.getElementById('btnRescan');
+
+            // ==================== CANVAS PARTICLES ====================
+            function resizeCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            function rf(min, max) { return Math.random() * (max - min) + min; }
+
+            let particles = [], rosePetals = [], goldenParticles = [], burstHearts = [], fireworksParticles = [], confettiPieces = [];
+            let celebrationMode = false;
+
+            class FloatingParticle {
+                constructor() { this.reset(); }
+                reset() { this.x = rf(0, bgCanvas.width); this.y = rf(-100, bgCanvas.height + 100); this.size = rf(8, 24); this.sy = rf(0.2, 1); this.sx = rf(-0.3, 0.3); this.op = rf(0.2, 0.65); this.rot = rf(0, Math.PI * 2); this.rs = rf(-0.008, 0.008); this.type = Math.random() < 0.5 ? 'heart' : 'sparkle'; this.po = rf(0, Math.PI * 2); }
+                update(t) { this.y -= this.sy; this.x += this.sx + Math.sin(t * 0.001 + this.po) * 0.35; this.rot += this.rs; if (this.y < -90) { this.y = bgCanvas.height + 70; this.x = rf(0, bgCanvas.width); } if (this.x < -70) this.x = bgCanvas.width + 50; if (this.x > bgCanvas.width + 70) this.x = -50; }
+                draw(ct, t) { ct.save(); ct.globalAlpha = this.op + Math.sin(t * 0.003 + this.po) * 0.18; ct.translate(this.x, this.y); ct.rotate(this.rot); if (this.type === 'heart') { ct.fillStyle = `rgba(${rf(180,255)|0},${rf(20,80)|0},${rf(40,90)|0},${this.op+0.15})`; ct.shadowColor = 'rgba(255,60,90,0.45)'; ct.shadowBlur = 9; ct.beginPath(); const s = this.size; ct.moveTo(0, -s * 0.3); ct.bezierCurveTo(-s * 0.5, -s * 0.7, -s * 0.9, -s * 0.2, 0, s * 0.5); ct.bezierCurveTo(s * 0.9, -s * 0.2, s * 0.5, -s * 0.7, 0, -s * 0.3); ct.fill(); } else { ct.fillStyle = `rgba(${rf(200,255)|0},${rf(150,210)|0},${rf(50,120)|0},${this.op+0.25})`; ct.shadowColor = 'rgba(255,215,0,0.5)'; ct.shadowBlur = 7; ct.beginPath(); const spikes = 5, oR = this.size * 0.6, iR = this.size * 0.2; for (let i = 0; i < spikes * 2; i++) { const r = i % 2 === 0 ? oR : iR; const a = (i * Math.PI) / spikes; const px = Math.cos(a) * r, py = Math.sin(a) * r; i === 0 ? ct.moveTo(px, py) : ct.lineTo(px, py); } ct.closePath(); ct.fill(); } ct.restore(); }
+            }
+
+            class RosePetal {
+                constructor() { this.reset(); }
+                reset() { this.x = rf(0, bgCanvas.width); this.y = rf(-160, -30); this.size = rf(9, 22); this.sy = rf(1.2, 3.2); this.sx = rf(-0.8, 0.8); this.rot = rf(0, Math.PI * 2); this.rs = rf(-0.025, 0.025); this.op = rf(0.35, 0.8); this.wa = rf(12, 35); this.wf = rf(0.003, 0.006); this.sx0 = this.x; }
+                update(t) { this.y += this.sy; this.x = this.sx0 + Math.sin(t * this.wf + this.y * 0.01) * this.wa; this.rot += this.rs; if (this.y > bgCanvas.height + 70) { this.reset(); this.y = rf(-160, -30); } }
+                draw(ct) { ct.save(); ct.globalAlpha = this.op; ct.translate(this.x, this.y); ct.rotate(this.rot); ct.fillStyle = '#c41e3a'; ct.shadowColor = 'rgba(180,20,50,0.5)'; ct.shadowBlur = 6; ct.beginPath(); ct.ellipse(0, 0, this.size * 0.65, this.size * 0.3, 0, 0, Math.PI * 2); ct.fill(); ct.fillStyle = '#e8506a'; ct.beginPath(); ct.ellipse(this.size * 0.18, -this.size * 0.08, this.size * 0.3, this.size * 0.18, 0.3, 0, Math.PI * 2); ct.fill(); ct.restore(); }
+            }
+
+            class GoldenParticle {
+                constructor() { this.reset(); }
+                reset() { this.x = rf(0, bgCanvas.width); this.y = rf(bgCanvas.height * 0.5, bgCanvas.height + 40); this.size = rf(2, 6); this.sy = rf(0.4, 1.3); this.sx = rf(-0.6, 0.6); this.op = rf(0.3, 0.8); this.po = rf(0, Math.PI * 2); }
+                update(t) { this.y -= this.sy; this.x += this.sx + Math.sin(t * 0.002 + this.po) * 0.5; if (this.y < -30) { this.y = bgCanvas.height + 40; this.x = rf(0, bgCanvas.width); } }
+                draw(ct, t) { ct.save(); ct.globalAlpha = this.op + Math.sin(t * 0.004 + this.po) * 0.2; ct.fillStyle = '#ffd700'; ct.shadowColor = 'rgba(255,215,0,0.7)'; ct.shadowBlur = 5; ct.beginPath(); ct.arc(this.x, this.y, this.size, 0, Math.PI * 2); ct.fill(); ct.restore(); }
+            }
+
+            class BurstHeart {
+                constructor(x, y) { this.x = x; this.y = y; this.size = rf(10, 28); this.vx = rf(-3.5, 3.5); this.vy = rf(-5.5, -1); this.g = 0.14; this.op = 1; this.rot = rf(0, Math.PI * 2); this.rs = rf(-0.06, 0.06); this.life = 1; this.decay = rf(0.01, 0.028); }
+                update() { this.x += this.vx; this.y += this.vy; this.vy += this.g; this.rot += this.rs; this.life -= this.decay; this.op = this.life; }
+                draw(ct) { if (this.life <= 0) return; ct.save(); ct.globalAlpha = this.op; ct.translate(this.x, this.y); ct.rotate(this.rot); ct.fillStyle = '#ff3050'; ct.shadowColor = 'rgba(255,60,90,0.8)'; ct.shadowBlur = 14; const s = this.size; ct.beginPath(); ct.moveTo(0, -s * 0.3); ct.bezierCurveTo(-s * 0.5, -s * 0.7, -s * 0.9, -s * 0.2, 0, s * 0.5); ct.bezierCurveTo(s * 0.9, -s * 0.2, s * 0.5, -s * 0.7, 0, -s * 0.3); ct.fill(); ct.restore(); }
+                isDead() { return this.life <= 0; }
+            }
+
+            class FireworkParticle {
+                constructor(x, y) { this.x = x; this.y = y; const a = rf(0, Math.PI * 2); const sp = rf(2.5, 11); this.vx = Math.cos(a) * sp; this.vy = Math.sin(a) * sp; this.size = rf(2.5, 8); this.color = ['#ff3050','#ff6b8a','#ffd700','#ffaa00','#ff4470','#ffdd55','#ffffff','#ff6090','#ffe4b5'][Math.floor(rf(0,9))]; this.op = 1; this.decay = rf(0.007, 0.022); this.g = 0.05; }
+                update() { this.x += this.vx; this.y += this.vy; this.vy += this.g; this.op -= this.decay; }
+                draw(ct) { if (this.op <= 0) return; ct.save(); ct.globalAlpha = this.op; ct.fillStyle = this.color; ct.shadowColor = this.color; ct.shadowBlur = 9; ct.beginPath(); ct.arc(this.x, this.y, this.size, 0, Math.PI*2); ct.fill(); ct.restore(); }
+                isDead() { return this.op <= 0; }
+            }
+
+            class ConfettiPiece {
+                constructor(x, y) { this.x = x; this.y = y; this.size = rf(5,15); this.vx = rf(-2.5,2.5); this.vy = rf(1.5,5); this.g = 0.04; this.rot = rf(0, Math.PI*2); this.rs = rf(-0.07,0.07); this.op = 1; this.decay = rf(0.0025,0.007); this.color = ['#ff3050','#ffd700','#ff6b8a','#ffaa00','#ffffff','#ff4470','#ffdd55','#ff6090','#ffe4b5'][Math.floor(rf(0,9))]; }
+                update() { this.x += this.vx; this.y += this.vy; this.vy += this.g; this.rot += this.rs; this.op -= this.decay; }
+                draw(ct) { if (this.op <= 0) return; ct.save(); ct.globalAlpha = this.op; ct.translate(this.x, this.y); ct.rotate(this.rot); ct.fillStyle = this.color; ct.shadowColor = this.color; ct.shadowBlur = 5; ct.fillRect(-this.size/2, -this.size/3, this.size, this.size*0.55); ct.restore(); }
+                isDead() { return this.op <= 0; }
+            }
+
+            for (let i=0; i<65; i++) particles.push(new FloatingParticle());
+            for (let i=0; i<25; i++) rosePetals.push(new RosePetal());
+            for (let i=0; i<35; i++) goldenParticles.push(new GoldenParticle());
+
+            // ==================== LOVE MESSAGES SYSTEM ====================
+            let currentMessagePool = [];
+            let totalMessagesClicked = 0;
+            const TOTAL_MESSAGES = 100;
+
+            function shuffleArray(arr) { const a = [...arr]; for (let i = a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+
+            function resetMessagePool() {
+                const msgs = getLoveMessages();
+                currentMessagePool = shuffleArray([...Array(Math.min(msgs.length, TOTAL_MESSAGES)).keys()]);
+                totalMessagesClicked = 0;
+                updateProgressUI();
+                messageText.textContent = 'اضغطي على القلب يا ' + settings.herNickname + ' ❤️';
+            }
+
+            function updateProgressUI() {
+                const pct = (totalMessagesClicked / TOTAL_MESSAGES) * 100;
+                progressFill.style.width = pct + '%';
+                progressLabel.textContent = 'رسائل الحب ' + totalMessagesClicked + ' / ' + TOTAL_MESSAGES + ' ❤️';
+            }
+
+            function getHeartCenter() { const rect = mainHeartSvg.getBoundingClientRect(); return { cx: rect.left + rect.width/2, cy: rect.top + rect.height/2 }; }
+
+            function triggerHeartBurst(cx, cy) {
+                for (let i=0; i<22; i++) burstHearts.push(new BurstHeart(cx, cy));
+                for (let i=0; i<12; i++) {
+                    const el = document.createElement('span');
+                    el.textContent = ['❤️','💕','💖','💗','💝','✨','💫','🌹','💛'][Math.floor(rf(0,9))];
+                    el.style.cssText = `position:fixed;pointer-events:none;z-index:9998;font-size:${rf(1,2.8)}rem;left:${cx}px;top:${cy}px;--bx:${rf(-140,140)}px;--by:${rf(-200,-30)}px;--br:${rf(-360,360)}deg;animation:burstFly 1.6s ease-out forwards;`;
+                    document.body.appendChild(el);
+                    setTimeout(() => el.remove(), 1700);
+                }
+                const ripple = document.createElement('div');
+                ripple.className = 'heart-ripple';
+                ripple.style.left = cx + 'px';
+                ripple.style.top = cy + 'px';
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 900);
+                if (navigator.vibrate) { try { navigator.vibrate([30,60,30]); } catch(e) {} }
+            }
+
+            function showLoveMessage() {
+                if (celebrationMode) return;
+                const msgs = getLoveMessages();
+                if (currentMessagePool.length === 0 && totalMessagesClicked >= Math.min(msgs.length, TOTAL_MESSAGES)) {
+                    triggerSecretSurprise();
+                    return;
+                }
+                if (!musicStarted) { startMusic(); musicStarted = true; }
+                if (currentMessagePool.length === 0) { resetMessagePool(); }
+                const ri = Math.floor(Math.random() * currentMessagePool.length);
+                const msgIndex = currentMessagePool[ri];
+                currentMessagePool.splice(ri, 1);
+                totalMessagesClicked++;
+                messageText.style.opacity = '0';
+                messageText.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    messageText.textContent = msgs[msgIndex];
+                    messageText.style.opacity = '1';
+                    messageText.style.transform = 'translateY(0)';
+                }, 180);
+                updateProgressUI();
+                const { cx, cy } = getHeartCenter();
+                triggerHeartBurst(cx, cy);
+                mainHeartSvg.style.animation = 'none';
+                mainHeartSvg.offsetHeight;
+                mainHeartSvg.style.animation = 'svgHeartBeatFast 0.4s ease-in-out';
+                setTimeout(() => { mainHeartSvg.style.animation = 'svgHeartBeat 1.2s ease-in-out infinite'; }, 450);
+                loveBtn.style.boxShadow = '0 0 70px rgba(255,60,90,1),0 0 120px rgba(255,60,90,0.7)';
+                setTimeout(() => { loveBtn.style.boxShadow = '0 8px 35px rgba(220,20,60,0.55),0 0 60px rgba(220,20,60,0.3)'; }, 550);
+                if (currentMessagePool.length === 0 && totalMessagesClicked >= Math.min(msgs.length, TOTAL_MESSAGES)) {
+                    setTimeout(() => { triggerSecretSurprise(); }, 1600);
+                }
+            }
+
+            function triggerSecretSurprise() {
+                celebrationMode = true;
+                secretOverlay.innerHTML = '';
+                secretOverlay.classList.add('active');
+                const lines = [
+                    { text: settings.herNickname, cls: 'golden', delay: 300 },
+                    { text: 'ثم', cls: '', delay: 1000 },
+                    { text: 'مهما قلت بحبك', cls: 'rose', delay: 1600 },
+                    { text: 'ولا كل كلام الدنيا هيقدر يوصف مكانتك في قلبي', cls: '', delay: 2300 },
+                    { text: 'انتي قلبي', cls: 'rose', delay: 3000 },
+                    { text: 'انتي روحي', cls: 'rose', delay: 3500 },
+                    { text: 'انتي الامان', cls: 'rose', delay: 4000 },
+                    { text: 'انتي اجمل حاجة حصلتلي', cls: '', delay: 4600 },
+                    { text: 'ربنا يخليكي ليا يا ' + settings.herNickname, cls: 'golden', delay: 5300 },
+                    { text: 'انا ممتن لكل لحظة جمعتني بيكي', cls: '', delay: 6000 },
+                    { text: 'عارفين بعض من ' + formatRelDate() + ' وكانت احلى بداية في حياتي', cls: '', delay: 6700 },
+                    { text: 'ووعد مني افضل احبك واسندك واحترمك طول العمر', cls: 'rose', delay: 7400 },
+                    { text: 'وهفضل احبك طول عمري ❤️', cls: 'golden', delay: 8100 },
+                ];
+                lines.forEach(l => {
+                    const el = document.createElement('div');
+                    el.className = 'secret-line' + (l.cls ? ' ' + l.cls : '');
+                    el.textContent = l.text;
+                    secretOverlay.appendChild(el);
+                    setTimeout(() => { el.classList.add('show'); }, l.delay);
+                });
+                const finalDelay = 9000;
+                const finalMsg = document.createElement('div');
+                finalMsg.className = 'secret-final';
+                finalMsg.innerHTML = 'يا ' + settings.herNickname + '<br>يمكن الموقع ده يخلص<br>لكن حبي ليكي عمره ما هيخلص<br>شكرا انك اجمل حاجة حصلتلي<br>بحبك<br>' + settings.hisName + ' ❤️';
+                secretOverlay.appendChild(finalMsg);
+                setTimeout(() => { finalMsg.classList.add('show'); }, finalDelay);
+                for (let i=0; i<10; i++) { setTimeout(() => { const fx = rf(bgCanvas.width*0.12, bgCanvas.width*0.88); const fy = rf(bgCanvas.height*0.15, bgCanvas.height*0.55); for (let j=0; j<70; j++) fireworksParticles.push(new FireworkParticle(fx, fy)); }, i*350); }
+                for (let i=0; i<50; i++) rosePetals.push(new RosePetal());
+                const confInt = setInterval(() => { if (!celebrationMode) { clearInterval(confInt); return; } for (let i=0; i<20; i++) confettiPieces.push(new ConfettiPiece(rf(0, bgCanvas.width), rf(-70,-5))); }, 500);
+                secretOverlay._confInt = confInt;
+                setTimeout(() => { secretOverlay.addEventListener('click', function cs() { secretOverlay.classList.remove('active'); celebrationMode = false; if (secretOverlay._confInt) clearInterval(secretOverlay._confInt); secretOverlay.removeEventListener('click', cs); resetMessagePool(); secretOverlay.innerHTML = ''; }, { once: true }); }, 11000);
+            }
+
+            function formatRelDate() { const d = getRelationshipStart(); return d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear(); }
+
+            // ==================== MUSIC SYSTEM ====================
+            let musicStarted = false;
+            let musicPlaylist = [];
+            let currentMusicIndex = 0;
+            let shuffleMode = false;
+            let repeatMode = 'none';
+            let shuffledPlaylist = [];
+
+            function buildMusicPlaylist() {
+                const paths = settings.music || [];
+                musicPlaylist = paths.filter(p => p.trim() !== '');
+                if (musicPlaylist.length === 0) musicPlaylist = ['music/love.mp3'];
+                currentMusicIndex = 0;
+                shuffledPlaylist = [...musicPlaylist];
+                if (shuffleMode) shuffleArray(shuffledPlaylist);
+            }
+
+            function getCurrentTrack() {
+                if (shuffleMode && shuffledPlaylist.length > 0) return shuffledPlaylist[currentMusicIndex % shuffledPlaylist.length];
+                return musicPlaylist[currentMusicIndex % musicPlaylist.length] || musicPlaylist[0] || '';
+            }
+
+            function loadTrack(index) {
+                if (musicPlaylist.length === 0) return;
+                currentMusicIndex = ((index % musicPlaylist.length) + musicPlaylist.length) % musicPlaylist.length;
+                const track = getCurrentTrack();
+                bgMusic.src = track;
+                bgMusic.load();
+                const name = track.split('/').pop().replace('.mp3','').replace(/_/g,' ').replace(/-/g,' ');
+                songNameDisplay.textContent = name.substring(0,20) || '🎵';
+                if (musicStarted) { bgMusic.play().catch(()=>{}); musicPlayBtn.textContent = '⏸'; }
+            }
+
+            function playNextTrack() {
+                if (musicPlaylist.length === 0) return;
+                if (repeatMode === 'one') { loadTrack(currentMusicIndex); return; }
+                currentMusicIndex++;
+                if (currentMusicIndex >= musicPlaylist.length) {
+                    if (repeatMode === 'all') { currentMusicIndex = 0; if (shuffleMode) { shuffledPlaylist = shuffleArray([...musicPlaylist]); } }
+                    else { currentMusicIndex = musicPlaylist.length-1; bgMusic.pause(); musicPlayBtn.textContent = '▶'; return; }
+                }
+                loadTrack(currentMusicIndex);
+            }
+
+            function playPrevTrack() {
+                if (musicPlaylist.length === 0) return;
+                currentMusicIndex--;
+                if (currentMusicIndex < 0) { currentMusicIndex = (repeatMode === 'all') ? musicPlaylist.length-1 : 0; }
+                loadTrack(currentMusicIndex);
+            }
+
+            function startMusic() {
+                if (musicStarted) return;
+                musicStarted = true;
+                buildMusicPlaylist();
+                const savedVol = localStorage.getItem('loveMusicVolume');
+                const vol = savedVol !== null ? parseInt(savedVol)/100 : 0.5;
+                bgMusic.volume = vol;
+                musicVolume.value = savedVol !== null ? parseInt(savedVol) : 50;
+                loadTrack(0);
+                bgMusic.play().catch(()=>{});
+                musicPlayBtn.textContent = '⏸';
+            }
+
+            buildMusicPlaylist();
+            bgMusic.addEventListener('ended', playNextTrack);
+            bgMusic.addEventListener('error', () => { songNameDisplay.textContent = '⚠️ خطأ'; setTimeout(() => { if (musicPlaylist.length > 1) playNextTrack(); }, 2000); });
+            musicPlayBtn.addEventListener('click', () => { if (!musicStarted) { startMusic(); return; } if (bgMusic.paused) { bgMusic.play().catch(()=>{}); musicPlayBtn.textContent = '⏸'; } else { bgMusic.pause(); musicPlayBtn.textContent = '▶'; } });
+            musicPrevBtn.addEventListener('click', playPrevTrack);
+            musicNextBtn.addEventListener('click', playNextTrack);
+            musicShuffleBtn.addEventListener('click', () => { shuffleMode = !shuffleMode; musicShuffleBtn.classList.toggle('active-toggle', shuffleMode); if (shuffleMode) { shuffledPlaylist = shuffleArray([...musicPlaylist]); currentMusicIndex = 0; } else { currentMusicIndex = musicPlaylist.indexOf(getCurrentTrack()); if (currentMusicIndex < 0) currentMusicIndex = 0; } loadTrack(currentMusicIndex); });
+            musicRepeatBtn.addEventListener('click', () => { const modes = ['none','one','all']; const idx = modes.indexOf(repeatMode); repeatMode = modes[(idx+1)%3]; musicRepeatBtn.classList.toggle('active-toggle', repeatMode !== 'none'); musicRepeatBtn.textContent = repeatMode === 'one' ? '🔂' : (repeatMode === 'all' ? '🔁' : '🔁'); });
+            musicVolume.addEventListener('input', () => { bgMusic.volume = musicVolume.value/100; localStorage.setItem('loveMusicVolume', musicVolume.value); });
+            const savedVol = localStorage.getItem('loveMusicVolume');
+            if (savedVol !== null) { bgMusic.volume = parseInt(savedVol)/100; musicVolume.value = parseInt(savedVol); }
+
+            // ==================== PHOTO SLIDER ====================
+            let currentSlideIndex = 0;
+            let totalSlides = 0;
+            let sliderInterval = null;
+
+            function buildSlider() {
+                sliderSlides.innerHTML = '';
+                sliderDots.innerHTML = '';
+                const imagePaths = settings.images || [];
+                if (imagePaths.length === 0) {
+                    sliderSlides.innerHTML = '<div class="slider-slide"><span class="slider-placeholder">📷❤️<br><small style="font-size:0.7rem;">ضعي صوركما في images.json</small></span></div>';
+                    totalSlides = 1;
+                } else {
+                    imagePaths.forEach((path, i) => {
+                        if (!path.trim()) return;
+                        const slide = document.createElement('div');
+                        slide.className = 'slider-slide';
+                        const img = document.createElement('img');
+                        img.src = path.trim();
+                        img.alt = 'صورتنا ' + (i+1);
+                        img.loading = 'lazy';
+                        img.onerror = () => { img.style.display = 'none'; slide.innerHTML = '<span class="slider-placeholder">📷<br><small>تعذر تحميل الصورة</small></span>'; };
+                        slide.appendChild(img);
+                        sliderSlides.appendChild(slide);
+                        const dot = document.createElement('span');
+                        dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+                        dot.addEventListener('click', () => goToSlide(i));
+                        sliderDots.appendChild(dot);
+                    });
+                    totalSlides = sliderSlides.children.length || 1;
+                }
+                currentSlideIndex = 0;
+                updateSliderPosition();
+                startSliderAuto();
+            }
+
+            function updateSliderPosition() {
+                sliderSlides.style.transform = 'translateX(-' + (currentSlideIndex * 100) + '%)';
+                const dots = sliderDots.querySelectorAll('.slider-dot');
+                dots.forEach((d, i) => d.classList.toggle('active', i === currentSlideIndex));
+            }
+
+            function goToSlide(index) { if (totalSlides <= 1) return; currentSlideIndex = ((index % totalSlides) + totalSlides) % totalSlides; updateSliderPosition(); resetSliderAuto(); }
+            function nextSlide() { goToSlide(currentSlideIndex + 1); }
+            function prevSlide() { goToSlide(currentSlideIndex - 1); }
+            function startSliderAuto() { stopSliderAuto(); if (totalSlides > 1) sliderInterval = setInterval(nextSlide, 4000); }
+            function stopSliderAuto() { if (sliderInterval) clearInterval(sliderInterval); sliderInterval = null; }
+            function resetSliderAuto() { stopSliderAuto(); startSliderAuto(); }
+            sliderPrev.addEventListener('click', prevSlide);
+            sliderNext.addEventListener('click', nextSlide);
+            let touchStartX = 0;
+            document.getElementById('sliderContainer').addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+            document.getElementById('sliderContainer').addEventListener('touchend', (e) => { const diff = touchStartX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) { if (diff > 0) nextSlide(); else prevSlide(); } });
+
+            // ==================== COUNTER ====================
+            function updateCounter() {
+                const relStart = getRelationshipStart();
+                const now = new Date();
+                const diffMs = now - relStart;
+                if (diffMs < 0) { counterDays.textContent = '0'; counterHours.textContent = '0'; counterMinutes.textContent = '0'; counterSeconds.textContent = '0'; return; }
+                const totalSeconds = Math.floor(diffMs / 1000);
+                const totalMinutes = Math.floor(totalSeconds / 60);
+                const totalHours = Math.floor(totalMinutes / 60);
+                const days = Math.floor(totalHours / 24);
+                const remainingHours = totalHours % 24;
+                const remainingMinutes = totalMinutes % 60;
+                const remainingSeconds = totalSeconds % 60;
+                counterDays.textContent = days.toLocaleString('ar-EG');
+                counterHours.textContent = remainingHours.toLocaleString('ar-EG');
+                counterMinutes.textContent = remainingMinutes.toLocaleString('ar-EG');
+                counterSeconds.textContent = remainingSeconds.toLocaleString('ar-EG');
+                document.getElementById('counterDateLabel').textContent = 'عارفين بعض من ' + formatRelDate() + ' ❤️';
+            }
+            setInterval(updateCounter, 1000);
+
+            // ==================== SHARE & SCREENSHOT ====================
+            shareBtn.addEventListener('click', () => {
+                const shareData = { title: settings.herNickname + ' ❤️ ' + settings.hisName, text: 'رسالة حب خاصة من ' + settings.hisName + ' لـ' + settings.herNickname + ' ❤️', url: window.location.href };
+                if (navigator.share) { navigator.share(shareData).catch(()=>{}); } else { navigator.clipboard.writeText(window.location.href).then(()=>{ alert('تم نسخ الرابط! ❤️'); }).catch(()=>{ alert('انسخي الرابط من المتصفح وشاركيه ❤️'); }); }
+            });
+            screenshotBtn.addEventListener('click', () => {
+                if (typeof html2canvas !== 'undefined') {
+                    html2canvas(document.getElementById('mainContainer'), { backgroundColor: '#0a0000', scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = settings.herNickname + '-' + settings.hisName + '.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                    }).catch(() => { alert('حاولي مرة تانية ❤️'); });
+                } else {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+                    script.onload = () => { screenshotBtn.click(); };
+                    script.onerror = () => { alert('تعذّر تحميل أداة التصوير، تأكدي من الاتصال بالإنترنت ❤️'); };
+                    document.head.appendChild(script);
+                }
+            });
+
+            // ==================== EVENT LISTENERS ====================
+            loveBtn.addEventListener('click', (e) => { e.preventDefault(); showLoveMessage(); });
+            mainHeartSvg.addEventListener('click', (e) => { e.preventDefault(); showLoveMessage(); });
+            heartContainer.addEventListener('click', (e) => { if (e.target === heartContainer) showLoveMessage(); });
+
+            // ==================== LOADING SCREEN ====================
+            setTimeout(() => { document.getElementById('loadLine2').classList.add('show'); }, 1600);
+            setTimeout(() => { loadBtn.classList.add('show'); }, 2200);
+            loadBtn.addEventListener('click', () => {
+                loadingOverlay.classList.add('hidden');
+                mainContainer.classList.add('visible');
+                const cards = mainContainer.querySelectorAll('.glass-card');
+                cards.forEach((card, i) => { setTimeout(() => { card.classList.add('revealed'); }, i * 180); });
+                setTimeout(() => { loadingOverlay.style.display = 'none'; }, 900);
+            });
+
+            // ==================== SCROLL REVEAL ====================
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.glass-card').forEach(card => observer.observe(card));
+
+            // ==================== BACKGROUND ANIMATION ====================
+            let animTime = 0;
+            function animate(timestamp) {
+                animTime = timestamp;
+                ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+                const grad = ctx.createRadialGradient(bgCanvas.width/2, bgCanvas.height/2, bgCanvas.width*0.05, bgCanvas.width/2, bgCanvas.height/2, bgCanvas.width*0.85);
+                grad.addColorStop(0, 'rgba(25,2,5,0.25)'); grad.addColorStop(0.5, 'rgba(8,0,0,0.5)'); grad.addColorStop(1, 'rgba(0,0,0,0.75)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+                for (const p of particles) { p.update(animTime); p.draw(ctx, animTime); }
+                for (const rp of rosePetals) { rp.update(animTime); rp.draw(ctx); }
+                for (const gp of goldenParticles) { gp.update(animTime); gp.draw(ctx, animTime); }
+                for (let i = burstHearts.length-1; i>=0; i--) { burstHearts[i].update(); burstHearts[i].draw(ctx); if (burstHearts[i].isDead()) burstHearts.splice(i,1); }
+                for (let i = fireworksParticles.length-1; i>=0; i--) { fireworksParticles[i].update(); fireworksParticles[i].draw(ctx); if (fireworksParticles[i].isDead()) fireworksParticles.splice(i,1); }
+                for (let i = confettiPieces.length-1; i>=0; i--) { confettiPieces[i].update(); confettiPieces[i].draw(ctx); if (confettiPieces[i].isDead()) confettiPieces.splice(i,1); }
+                if (celebrationMode && Math.random() < 0.25) { const sx = rf(0, bgCanvas.width), sy = rf(0, bgCanvas.height*0.6); for (let j=0; j<6; j++) fireworksParticles.push(new FireworkParticle(sx, sy)); }
+                if (celebrationMode && Math.random() < 0.4) { rosePetals.push(new RosePetal()); rosePetals[rosePetals.length-1].y = rf(-60,-10); }
+                requestAnimationFrame(animate);
+            }
+            requestAnimationFrame(animate);
+
+            // ==================== SETTINGS PANEL ====================
+            function fillSettingsForm() {
+                document.getElementById('setHerName').value = settings.herName;
+                document.getElementById('setHerNickname').value = settings.herNickname;
+                document.getElementById('setHisName').value = settings.hisName;
+                document.getElementById('setRelDate').value = settings.relationshipStart;
+                document.getElementById('setOpenMsg').value = settings.openingMessage;
+                document.getElementById('setThemeColor').value = settings.themeColor;
+                document.getElementById('setImages').value = (settings.images || []).join('\n');
+                document.getElementById('setMusic').value = (settings.music || []).join('\n');
+                document.getElementById('setMessages').value = (settings.customMessages || []).join('\n');
+            }
+
+            settingsBtn.addEventListener('click', () => { fillSettingsForm(); settingsOverlay.classList.add('active'); });
+            btnCloseSettings.addEventListener('click', () => { settingsOverlay.classList.remove('active'); });
+            settingsOverlay.addEventListener('click', (e) => { if (e.target === settingsOverlay) settingsOverlay.classList.remove('active'); });
+
+            btnSaveSettings.addEventListener('click', () => {
+                settings.herName = document.getElementById('setHerName').value.trim() || DEFAULT_SETTINGS.herName;
+                settings.herNickname = document.getElementById('setHerNickname').value.trim() || DEFAULT_SETTINGS.herNickname;
+                settings.hisName = document.getElementById('setHisName').value.trim() || DEFAULT_SETTINGS.hisName;
+                settings.relationshipStart = document.getElementById('setRelDate').value || DEFAULT_SETTINGS.relationshipStart;
+                settings.openingMessage = document.getElementById('setOpenMsg').value.trim() || DEFAULT_SETTINGS.openingMessage;
+                settings.themeColor = document.getElementById('setThemeColor').value || DEFAULT_SETTINGS.themeColor;
+                settings.images = document.getElementById('setImages').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                settings.music = document.getElementById('setMusic').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                const customMsgs = document.getElementById('setMessages').value.split('\n').map(l => l.trim()).filter(l => l.length >= 10);
+                settings.customMessages = customMsgs.length >= 100 ? customMsgs : [];
+                saveSettings(settings);
+                applySettingsToUI();
+                buildSlider();
+                buildMusicPlaylist();
+                if (musicStarted && musicPlaylist.length > 0) { loadTrack(0); }
+                resetMessagePool();
+                updateCounter();
+                settingsOverlay.classList.remove('active');
+            });
+
+            btnResetSettings.addEventListener('click', () => {
+                if (confirm('هل أنت متأكد من استعادة جميع الإعدادات الافتراضية؟')) {
+                    settings = { ...DEFAULT_SETTINGS };
+                    saveSettings(settings);
+                    applySettingsToUI();
+                    fillSettingsForm();
+                    buildSlider();
+                    buildMusicPlaylist();
+                    resetMessagePool();
+                    updateCounter();
+                    settingsOverlay.classList.remove('active');
+                }
+            });
+
+            btnRescan.addEventListener('click', async () => {
+                // Force reload from JSON files
+                settings.images = [];
+                settings.music = [];
+                await loadExternalMedia();
+                fillSettingsForm();
+                buildSlider();
+                buildMusicPlaylist();
+                if (musicStarted && musicPlaylist.length > 0) { loadTrack(0); }
+                resetMessagePool();
+                alert('تمت إعادة تحميل الصور والموسيقى من ملفات JSON بنجاح.');
+            });
+
+            // ==================== TOUCH & KEYBOARD ====================
+            document.addEventListener('touchmove', function(e) { if (e.target.closest('#secretOverlay') && secretOverlay.classList.contains('active')) return; }, { passive: true });
+            document.querySelectorAll('button, #mainHeartSvg').forEach(el => {
+                el.addEventListener('touchstart', function(e) { if (e.target.closest('#musicController') || e.target.closest('#settingsPanel')) return; e.preventDefault(); this.click(); }, { passive: false });
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') nextSlide();
+                if (e.key === 'ArrowRight') prevSlide();
+                if ((e.key === ' ' || e.key === 'Enter') && (document.activeElement === loveBtn || document.activeElement === mainHeartSvg)) { e.preventDefault(); showLoveMessage(); }
+            });
+
+            // ==================== START APP ====================
+            initializeApp().then(() => {
+                console.log('%c💖🌹 ' + settings.herNickname + '! هذا الموقع صُنع خصيصاً لكِ ❤️ %cمن ' + settings.hisName, 'font-size:1.3rem;color:#ff6b8a;', 'font-size:1rem;color:#ffd700;');
+                console.log('%c💝 100 رسالة حب في انتظارك... اضغطي على القلب 💝', 'font-size:1.1rem;color:#ff4470;');
+                console.log('%c⚙️ افتحي الإعدادات من زر ⚙️ لتخصيص الموقع ✨', 'font-size:0.9rem;color:#ffb6c1;');
+                console.log('%c📁 يتم تحميل الصور والموسيقى من images.json و music.json ✨', 'font-size:0.9rem;color:#ffd700;');
+            });
+        })();
+    </script>
+</body>
+</html>
